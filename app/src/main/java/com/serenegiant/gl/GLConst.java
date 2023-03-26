@@ -31,22 +31,22 @@ public interface GLConst {
 	public static final int GL_TEXTURE_EXTERNAL_OES	= 0x8D65;
 	public static final int GL_TEXTURE_2D           = 0x0DE1;
 	/**
-	 * 無効なテクスチャ名/テクスチャID
+	 * 无效的纹理名称/纹理 ID
 	 */
 	public static final int GL_NO_TEXTURE = -1;
 	/**
-	 * 無効なバッファ名/バッファID
+	 * 缓冲区名称/缓冲区 ID 无效
 	 */
 	public static final int GL_NO_BUFFER = -1;
 	/**
-	 * 無効なシェーダープログラム名/シェーダープログラムID
+	 * 着色器程序名称/着色器程序 ID 无效
 	 */
 	public static final int GL_NO_PROGRAM = -1;
 
-// OpenGL|ES関係の定数は全て整数で型チェックができないので間違えて違う引数に
-// してしまうことがあるので、アノテーションでチェックできるように、
-// テクスチャターゲット、テクスチャユニット、補間方法、エッジのラップ/クランプ処理の
-// 定数用アノテーションを定義
+// OpenGL|ES 关系中的所有常量都是整数，不能进行类型检查，因此您可能会犯错误并使用错误的参数。
+// 既然可能是，所以你可以用注释来检查它，
+// 纹理目标、纹理单元、插值方法和边缘缠绕/夹紧
+// 定义常量的批注
 
 	@IntDef({
 		GL_TEXTURE_EXTERNAL_OES,

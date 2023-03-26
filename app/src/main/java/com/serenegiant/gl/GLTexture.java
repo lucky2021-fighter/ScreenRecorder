@@ -27,21 +27,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Size;
 
 /**
- * OpenGL|ESのテクスチャ操作用のヘルパークラス
+ * 用于OpenGL纹理操作的辅助对象类
  */
 public class GLTexture implements GLConst {
-	private static final boolean DEBUG = false;	// XXX 実働時はfalseにすること
+	private static final boolean DEBUG = true;	// XXX 实际工作时要做false
 	private static final String TAG = GLTexture.class.getSimpleName();
 
 	private static final boolean DEFAULT_ADJUST_POWER2 = false;
 
 	/**
-	 * インスタンス生成のためのヘルパーメソッド
-	 * テクスチャターゲットはGL_TEXTURE_2D
-	 * テクスチャユニットはGL_TEXTURE0固定なので複数同時には使用できない
-	 * filter_paramはGLES30.GL_LINEAR
-	 * @param width テクスチャサイズ
-	 * @param height テクスチャサイズ
+	 * 用于实例生成的辅助对象方法
+	 * 纹理目标为GL_TEXTURE_2D
+	 * 纹理单元为GL_TEXTURE0固定，不能同时使用多个
+	 * filter_param为GLES30.GL_LINEAR
+	 * @param width 纹理大小
+	 * @param height 纹理大小
 	 */
 	public static GLTexture newInstance(final int width, final int height) {
 		return new GLTexture(
@@ -107,7 +107,7 @@ public class GLTexture implements GLConst {
 	}
 
 	/**
-	 * 既存テクスチャのラップ用ヘルパーメソッド
+	 * 现有纹理的包裹辅助对象方法
 	 * @param texTarget
 	 * @param texUnit
 	 * @param texId
@@ -137,20 +137,20 @@ public class GLTexture implements GLConst {
 	private int mTextureId;
 	@Size(min=16)
 	@NonNull
-	private final float[] mTexMatrix = new float[16];	// テクスチャ変換行列
+	private final float[] mTexMatrix = new float[16];	// 纹理变换矩阵
 	private int mTexWidth, mTexHeight;
 	private int mWidth, mHeight;
 	private int viewPortX, viewPortY, viewPortWidth, viewPortHeight;
 
 	/**
-	 * コンストラクタ
-	 * @param texTarget 既存のテクスチャをラップするとき以外GL_TEXTURE_EXTERNAL_OESはだめ
+	 * 构造 函数
+	 * @param texTarget 不GL_TEXTURE_EXTERNAL_OES，除非包裹现有纹理
 	 * @param texUnit
 	 * @param texId
-	 * @param width テクスチャサイズ
-	 * @param height テクスチャサイズ
-	 * @param adjust_power2 テクスチャサイズを2の乗数にするかどうか
-	 * @param filter_param	テクスチャの補間方法を指定 GL_LINEARとかGL_NEAREST
+	 * @param width 纹理大小
+	 * @param height 纹理大小
+	 * @param adjust_power2 是否使纹理大小为 2 的幂
+	 * @param filter_param	GL_LINEAR指定纹理的插值方式GL_NEAREST
 	 */
 	protected GLTexture(
 		@TexTarget final int texTarget, @TexUnit final int texUnit, final int texId,
@@ -158,7 +158,8 @@ public class GLTexture implements GLConst {
 		final boolean adjust_power2,
 		@MinMagFilter final int filter_param) {
 
-		if (DEBUG) Log.v(TAG, String.format("コンストラクタ(%d,%d)", width, height));
+		if (DEBUG) Log.v(TAG, String.format("GLTexture constructor (%d,%d)", width, height)
+				+ ", adjust_power2=" + adjust_power2);
 		TEX_TARGET = texTarget;
 		TEX_UNIT = texUnit;
 		mWrappedTexture = texId > GL_NO_TEXTURE;
@@ -208,8 +209,8 @@ public class GLTexture implements GLConst {
 	}
 
 	/**
-	 * Viewportを設定
-	 * ここで設定した値は次回以降makeCurrentを呼んだときに復帰される
+	 * Viewport配置
+	 * 此处设置的值将在您下次调用 makeCurrent 时恢复。
 	 * @param x
 	 * @param y
 	 * @param width
@@ -225,11 +226,11 @@ public class GLTexture implements GLConst {
 	}
 
 	/**
-	 * このインスタンスで管理しているテクスチャを無効にする(アンバインドする)
+	 * 禁用此实例管理的纹理(アンバインドする)
 	 */
 	public void unbind() {
-//		if (DEBUG) Log.v(TAG, "swap:");
-		GLES20.glActiveTexture(TEX_UNIT);	// テクスチャユニットを選択
+		if (DEBUG) Log.v(TAG, "swap:");
+		GLES20.glActiveTexture(TEX_UNIT);	// 选择纹理单位
 		GLES20.glBindTexture(TEX_TARGET, 0);
 	}
 
@@ -238,7 +239,7 @@ public class GLTexture implements GLConst {
 	}
 
 	/**
-	 * テクスチャが外部テクスチャかどうかを取得
+	 * 获取纹理是否为外部纹理
 	 * @return
 	 */
 	public boolean isOES() {
@@ -246,7 +247,7 @@ public class GLTexture implements GLConst {
 	}
 
 	/**
-	 * テクスチャターゲットを取得(GL_TEXTURE_2D)
+	 * 获取纹理目标(GL_TEXTURE_2D)
 	 * @return
 	 */
 	@TexTarget
@@ -260,7 +261,7 @@ public class GLTexture implements GLConst {
 	}
 
 	/**
-	 * テクスチャ名を取得
+	 * 获取纹理名称
 	 * @return
 	 */
 	public int getTexId() {
@@ -276,14 +277,14 @@ public class GLTexture implements GLConst {
 	}
 
 	/**
-	 * #copyTexMatrix()の返り値用のfloat配列
+	 * #copyTexMatrix()返回值为 的浮点数组
 	 */
 	@Size(min=16)
 	@NonNull
 	private final float[] mResultMatrix = new float[16];
 	/**
-	 * IGLSurfaceの実装
-	 * テクスチャ座標変換行列のコピーを取得
+	 * 实现 IGLSurface
+	 * 获取纹理转换矩阵的副本
 	 * @return
 	 */
 	@Size(min=16)
@@ -305,7 +306,7 @@ public class GLTexture implements GLConst {
 	}
 
 	/**
-	 * テクスチャ座標変換行列を取得(内部配列をそのまま返すので変更時は要注意)
+	 * 获取纹理转换矩阵(内部数组按原样返回，因此在更改它时要小心。)
 	 * @return
 	 */
 	@Size(min=16)
@@ -315,7 +316,7 @@ public class GLTexture implements GLConst {
 	}
 
 	/**
-	 * テクスチャ幅を取得
+	 * 获取纹理宽度
 	 * @return
 	 */
 	public int getTexWidth() {
@@ -323,7 +324,7 @@ public class GLTexture implements GLConst {
 	}
 
 	/**
-	 * テクスチャ高さを取得
+	 * 获取纹理高度
 	 * @return
 	 */
 	public int getTexHeight() {
@@ -332,14 +333,14 @@ public class GLTexture implements GLConst {
 
 
 	/**
-	 * 指定したビットマップをテクスチャに読み込む
+	 * 将指定的位图加载到纹理中
  	 * @param bitmap
 	 */
 	public void loadBitmap(@NonNull final Bitmap bitmap) {
 		final int width = bitmap.getWidth();
 		final int height = bitmap.getHeight();
 		if (!mWrappedTexture && (width > mTexWidth) || (height > mTexHeight)) {
-			// 自前でテクスチャ生成＆テクスチャサイズが大きくなったとき
+			// 自行生成纹理，当纹理大小增加时
 			releaseTexture();
 			createTexture(width, height);
 		}
@@ -355,10 +356,10 @@ public class GLTexture implements GLConst {
 	}
 
 	private void createTexture(final int width, final int height) {
-//		if (DEBUG) Log.v(TAG, String.format("texSize(%d,%d)", mTexWidth, mTexHeight));
+		if (DEBUG) Log.v(TAG, String.format("texSize(%d,%d)", mTexWidth, mTexHeight));
 		if (mTextureId <= GL_NO_TEXTURE) {
 			if (ADJUST_POWER2) {
-				// テクスチャのサイズは2の乗数にするとき
+				// 当纹理大小为 2 的幂时
 				int w = 1;
 				for (; w < width; w <<= 1) ;
 				int h = 1;
@@ -374,20 +375,20 @@ public class GLTexture implements GLConst {
 			mWidth = width;
 			mHeight = height;
 			mTextureId = GLUtils.initTex(TEX_TARGET, TEX_UNIT, FILTER_PARAM);
-			// テクスチャのメモリ領域を確保する
+			// 为纹理保留内存空间
 			GLES20.glTexImage2D(TEX_TARGET,
-				0,					// ミップマップレベル0(ミップマップしない)
-				GLES20.GL_RGBA,				// 内部フォーマット
-				mTexWidth, mTexHeight,		// サイズ
-				0,					// 境界幅
-				GLES20.GL_RGBA,				// 引き渡すデータのフォーマット
-				GLES20.GL_UNSIGNED_BYTE,	// データの型
-				null);				// ピクセルデータ無し
+				0,					// mipmap级别0(不要 mipmap)
+				GLES20.GL_RGBA,				// 内部格式
+				mTexWidth, mTexHeight,		// 大小
+				0,					// 边界宽度
+				GLES20.GL_RGBA,				// 要传递的数据的格式
+				GLES20.GL_UNSIGNED_BYTE,	// 数据类型
+				null);				// 无像素数据
 		} else {
 			mWidth = mTexWidth = width;
 			mHeight = mTexHeight = height;
 		}
-		// テクスチャ変換行列を初期化
+		// 初始化纹理转换矩阵
 		Matrix.setIdentityM(mTexMatrix, 0);
 		mTexMatrix[0] = mWidth / (float)mTexWidth;
 		mTexMatrix[5] = mHeight / (float)mTexHeight;

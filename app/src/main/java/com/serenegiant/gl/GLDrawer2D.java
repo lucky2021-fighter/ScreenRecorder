@@ -37,15 +37,15 @@ import androidx.annotation.Size;
 import static com.serenegiant.gl.ShaderConst.*;
 
 /**
- * 描画領域全面にテクスチャを2D描画するためのヘルパークラス
- * 基本的に直接生成せずにGLDrawer2D#createメソッドを使うこと
+ * 用于整个绘图区域上的 2D 绘图纹理的帮助程序类
+ * 基本上使用 GLDrawer2D#create 方法而不直接生成
  */
 public class GLDrawer2D implements GLConst {
-	private static final boolean DEBUG = false; // FIXME set false on release
+	private static final boolean DEBUG = true; // FIXME set false on release
 	private static final String TAG = GLDrawer2D.class.getSimpleName();
 
 	/**
-	 * GLDrawer2Dインスタンス生成用のファクトリーインターフェース
+	 * 用于 GLDrawer2D 实例化的工厂接口
 	 */
 	public interface DrawerFactory {
 		@NonNull
@@ -53,7 +53,7 @@ public class GLDrawer2D implements GLConst {
 	}
 
 	/**
-	 * デフォルトのDrawerFactory実装
+	 * 默认工厂实现DrawerFactory
 	 */
 	public static DrawerFactory DEFAULT_FACTORY = new DrawerFactory() {
 		@NonNull
@@ -64,23 +64,23 @@ public class GLDrawer2D implements GLConst {
 	};
 
 	/**
-	 * バッファオブジェクトを使って描画するかどうか
+	 * 是否使用缓冲区对象进行绘制
 	 */
 	protected static final boolean USE_VBO = true;
 
 	protected static final float[] DEFAULT_VERTICES = {
-		1.0f, 1.0f,		// 右上
-		-1.0f, 1.0f,	// 左上
-		1.0f, -1.0f,	// 右下
-		-1.0f, -1.0f,	// 左下
+        -1.0f, -1.0f,   // 0 bottom left
+        1.0f, -1.0f,   // 1 bottom right
+        -1.0f,  1.0f,   // 2 top left
+        1.0f,  1.0f,   // 3 top right
 	};
 	protected static final float[] DEFAULT_TEXCOORD = {
-		1.0f, 0.0f,		// 右上
-		0.0f, 0.0f,		// 左上
-		1.0f, 1.0f,		// 右下
-		0.0f, 1.0f,		// 左下
+        0.0f, 0.0f,     // 0 bottom left
+        1.0f, 0.0f,     // 1 bottom right
+        0.0f, 1.0f,     // 2 top left
+        1.0f, 1.0f      // 3 top right
 	};
-	// 元々のDEFAULT_TEXCOORDはテクスチャ座標を上下反転させたこっちだった
+	// 最初的DEFAULT_TEXCOORD是这个，纹理坐标颠倒了。
 	protected static final float[] DEFAULT_TEXCOORD_FLIP_VERTICAL = {
 		1.0f, 1.0f,		// 右上
 		0.0f, 1.0f,		// 左上
@@ -90,17 +90,17 @@ public class GLDrawer2D implements GLConst {
 	protected static final int FLOAT_SZ = Float.SIZE / 8;
 
 	/**
-	 * 頂点座標用バッファオブジェクト名
+	 * 顶点坐标缓冲区对象名称
 	 */
 	private int mBufVertex = GL_NO_BUFFER;
 	/**
-	 * テクスチャ座標用バッファオブジェクト名
+	 * 纹理坐标的缓冲区对象名称
 	 */
 	private int mBufTexCoord = GL_NO_BUFFER;
 
 	/**
-	 * インスタンス生成のためのヘルパーメソッド
-	 * 頂点シェーダーとフラグメントシェーダはデフォルトのものを使う
+	 * 实例化的帮助程序方法
+	 * 使用默认顶点着色器和片段着色器
 	 * @param isGLES3
 	 * @param isOES
 	 * @return
@@ -110,7 +110,7 @@ public class GLDrawer2D implements GLConst {
 	}
 
 	/**
-	 * インスタンス生成のためのヘルパーメソッド
+	 * 实例化的帮助程序方法
 	 * @param isGLES3
 	 * @param isOES
 	 * @param fs
@@ -125,7 +125,7 @@ public class GLDrawer2D implements GLConst {
 	}
 
 	/**
-	 * インスタンス生成のためのヘルパーメソッド
+	 * 实例化的帮助程序方法
 	 * @param isGLES3
 	 * @param isOES
 	 * @param vs
@@ -141,7 +141,7 @@ public class GLDrawer2D implements GLConst {
 	}
 
 	/**
-	 * インスタンス生成のためのヘルパーメソッド
+	 * 实例化的帮助程序方法
 	 * @param isGLES3
 	 * @param isOES
 	 * @param vertices
@@ -158,7 +158,7 @@ public class GLDrawer2D implements GLConst {
 	}
 
 	/**
-	 * インスタンス生成のためのヘルパーメソッド
+	 * 实例化的帮助程序方法
 	 * @param isGLES3
 	 * @param isOES
 	 * @param vertices
@@ -176,7 +176,7 @@ public class GLDrawer2D implements GLConst {
 	}
 
 	/**
-	 * インスタンス生成のためのヘルパーメソッド
+	 * 实例化的帮助程序方法
 	 * @param vertices
 	 * @param texcoord
 	 * @param isOES
@@ -198,72 +198,72 @@ public class GLDrawer2D implements GLConst {
 
 //================================================================================
 	/**
-	 * GLES3を使うかどうか
+	 * 是否使用 GLES3
 	 */
 	public final boolean isGLES3;
 	/**
-	 * 頂点の数
+	 * 顶点数
 	 */
 	protected final int VERTEX_NUM;
 	/**
-	 * 頂点配列のサイズ
+	 * 顶点数组大小
 	 */
 	protected final int VERTEX_SZ;
 	/**
-	 * 頂点座標
+	 * 顶点坐标
 	 */
 	protected final FloatBuffer pVertex;
 	/**
-	 * テクスチャ座標
+	 * 纹理坐标
 	 */
 	protected final FloatBuffer pTexCoord;
 	/**
-	 * テクスチャターゲット
-	 * GL_TEXTURE_EXTERNAL_OESかGL_TEXTURE_2D
+	 * 纹理目标
+	 * GL_TEXTURE_EXTERNAL_OES或GL_TEXTURE_2D
 	 */
 	@TexTarget
 	protected final int mTexTarget;
 
 	protected int hProgram;
 	/**
-	 * 頂点座標のlocation
+	 * 顶点坐标的location
 	 */
 	protected int maPositionLoc;
 	/**
-	 * テクスチャ座標のlocation
+	 * 纹理坐标的位置location
 	 */
 	protected int maTextureCoordLoc;
 	/**
-	 * 使用するテクスチャユニットのlocation
+	 * 要使用的纹理单元的location
 	 */
 	protected int muTextureLoc;
 	/**
-	 * モデルビュー変換行列のlocation
+	 * Mvp转换矩阵location
 	 */
 	protected int muMVPMatrixLoc;
 	/**
-	 * テクスチャ座標変換行列のlocation
+	 * 纹理转换矩阵的位置
 	 */
 	protected int muTexMatrixLoc;
 	/**
-	 * モデルビュー変換行列
+	 * MVP转换矩阵
 	 */
 	@Size(min=16)
     @NonNull
 	protected final float[] mMvpMatrix = new float[16];
 	/**
-	 * エラーカウンタ
+	 * 错误计数器
 	 */
 	private int errCnt;
 
 	/**
-	 * コンストラクタ
-	 * GLコンテキスト/EGLレンダリングコンテキストが有効な状態で呼ばないとダメ
-	 * @param isGLES3 GL|ES3かどうか
-	 * @param isOES 外部テクスチャ(GL_TEXTURE_EXTERNAL_OES)を描画に使う場合はtrue。
-	 * 				通常の2Dテキスチャを描画に使うならfalse
-	 * @param vertices 頂点座標, floatを8個 = (x,y) x 4ペア
-	 * @param texcoord テクスチャ座標, floatを8個 = (s,t) x 4ペア
+	 * 构造 函数
+	 * GL上下文/EGL必须在启用渲染上下文的情况下调用
+	 * @param isGLES3 是否GL|ES3
+	 * @param isOES 外部纹理(GL_TEXTURE_EXTERNAL_OES)用于绘图为true
+	 * 				如果使用普通 2D 纹理进行绘制，则为 false。
+	 * @param vertices 顶点坐标, float 有8个 = (x,y) x 4双
+	 * @param texcoord 纹理坐标, float有8个= (s,t) x 4双
 	 */
 	protected GLDrawer2D(
 		final boolean isGLES3, final boolean isOES,
@@ -271,7 +271,7 @@ public class GLDrawer2D implements GLConst {
 		@Nullable @Size(min=8) final float[] texcoord,
 		@Nullable final String vs, @Nullable final String fs) {
 
-		if (DEBUG) Log.v(TAG, "コンストラクタ:isGLES3=" + isGLES3 + ",isOES=" + isOES);
+		if (DEBUG) Log.v(TAG, "GLDrawer2D constructor :isGLES3=" + isGLES3 + ",isOES=" + isOES);
 		this.isGLES3 = isGLES3;
 		@NonNull
 		final float[] _vertices = (vertices != null && vertices.length >= 2) ? vertices : DEFAULT_VERTICES;
@@ -290,7 +290,7 @@ public class GLDrawer2D implements GLConst {
 		pVertex = BufferHelper.createFloatBuffer(_vertices);
 		pTexCoord = BufferHelper.createFloatBuffer(_texcoord);
 
-		// モデルビュー変換行列を初期化
+		// 初始化Mvp转换矩阵
 		Matrix.setIdentityM(mMvpMatrix, 0);
 
 		updateShader(_vs, _fs);
@@ -422,11 +422,11 @@ public class GLDrawer2D implements GLConst {
 		if (hProgram < 0) return;
 		glUseProgram();
 		if (tex_matrix != null) {
-			// テクスチャ変換行列が指定されている時
+			// 指定纹理转换矩阵时
 			updateTexMatrix(tex_matrix, tex_offset);
 		}
 		if (mvp_matrix != null) {
-			// モデルビュー変換行列が指定されている時
+			// 指定模型-视图转换矩阵时
 			updateMvpMatrix(mvp_matrix, mvp_offset);
 		}
 		bindTexture(texUnit, texId);

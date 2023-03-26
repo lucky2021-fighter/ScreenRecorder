@@ -172,15 +172,15 @@ public abstract class EglTask extends MessageTask {
 	}
 
 	/**
-	 * GLコンテキストのバージョンを取得
-	 * @return GLコンテキストが無効なら0が返る, 有効なら0, 1, 2, 3のいずれか(API>=16なので1が返ることはないはずだけど)
+	 * 获取 GL 上下文版本
+	 * @return 如果禁用 GL 上下文，则返回 0，如果启用，则返回 0、1、2 或 3(API>=16不应该返回1)
 	 */
 	public int getGlVersion() {
 		return mGLContext.getGlVersion();
 	}
 
 	/**
-	 * GLコンテキストでOpenGL|ES3に対応しているかどうかを取得
+	 * 在 GL 上下文中获取是否是OpenGL|ES3
 	 * @return
 	 */
 	public boolean isGLES3() {

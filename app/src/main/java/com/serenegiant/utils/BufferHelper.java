@@ -259,7 +259,7 @@ public class BufferHelper {
 	public static final int SIZEOF_FLOAT_BYTES = Float.SIZE / 8;
 
 	/**
-	 * 引数のfloat配列と同じ長さのFloatBufferを生成して引数の値をセットする
+	 * 生成与参数的浮点数组长度相同的 FloatBuffer 并设置参数的值
 	 * @param coords
 	 * @return
 	 */

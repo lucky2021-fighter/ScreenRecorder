@@ -96,25 +96,25 @@ public class ShaderConst implements GLConst {
 		"}\n";
 
 //--------------------------------------------------------------------------------
-// 頂点シェーダー
+// 顶点着色器
 	/**
-	 * モデルビュー変換行列とテクスチャ変換行列適用するだけの頂点シェーダー
+	 * 仅应用Mvp转换矩阵和纹理转换矩阵的顶点着色器
 	 * for ES2
 	 */
 	public static final String VERTEX_SHADER_ES2
 		= SHADER_VERSION_ES2 +
-		"uniform mat4 uMVPMatrix;\n" +				// モデルビュー変換行列
-		"uniform mat4 uTexMatrix;\n" +				// テクスチャ変換行列
-		"attribute highp vec4 aPosition;\n" +		// 頂点座標
-		"attribute highp vec4 aTextureCoord;\n" +	// テクスチャ情報
-		"varying highp vec2 vTextureCoord;\n" +		// フラグメントシェーダーへ引き渡すテクスチャ座標
+		"uniform mat4 uMVPMatrix;\n" +				// Mvp转换矩阵
+		"uniform mat4 uTexMatrix;\n" +				// 纹理转换矩阵
+		"attribute highp vec4 aPosition;\n" +		// 顶点坐标
+		"attribute highp vec4 aTextureCoord;\n" +	// 纹理信息
+		"varying highp vec2 vTextureCoord;\n" +		// 要传递给片段着色器的纹理坐标
 		"void main() {\n" +
 		"    gl_Position = uMVPMatrix * aPosition;\n" +
 		"    vTextureCoord = (uTexMatrix * aTextureCoord).xy;\n" +
 		"}\n";
 
 	/**
-	 * モデルビュー変換行列とテクスチャ変換行列適用するだけの頂点シェーダー
+	 * 仅应用Mvp转换矩阵和纹理转换矩阵的顶点着色器
 	 * for ES3
 	 */
 	public static final String VERTEX_SHADER_ES3
@@ -130,9 +130,9 @@ public class ShaderConst implements GLConst {
 		"}\n";
 
 //--------------------------------------------------------------------------------
-// フラグメントシェーダー
+// 片段着色器
 	/**
-	 * テクスチャを単純コピーするだけのフラグメントシェーダ
+	 * 仅复制纹理的片段着色器
 	 * for ES2
 	 */
 	private static final String FRAGMENT_SHADER_BASE_ES2
@@ -170,7 +170,7 @@ public class ShaderConst implements GLConst {
 
 //--------------------------------------------------------------------------------
 	/**
-	 * 白黒二値変換するフラグメントシェーダ
+	 * 黑白二进制片段着色器
 	 * for ES2
 	 */
 	private static final String FRAGMENT_SHADER_BW_BASE_ES2
@@ -190,7 +190,7 @@ public class ShaderConst implements GLConst {
 		= String.format(FRAGMENT_SHADER_BW_BASE_ES2, HEADER_OES_ES2, SAMPLER_OES);
 
 	/**
-	 * 白黒二値変換するフラグメントシェーダ
+	 * 黑白二进制片段着色器
 	 * for ES3
 	 */
 	private static final String FRAGMENT_SHADER_BW_BASE_ES3
@@ -212,7 +212,7 @@ public class ShaderConst implements GLConst {
 
 //--------------------------------------------------------------------------------
 	/**
-	 * ナイトビジョン風に強調表示するフラグメントシェーダ
+	 * 用于夜视样式突出显示的片段着色器
 	 * for ES2
 	 */
 	private static final String FRAGMENT_SHADER_NIGHT_BASE_ES2
@@ -232,7 +232,7 @@ public class ShaderConst implements GLConst {
 		= String.format(FRAGMENT_SHADER_NIGHT_BASE_ES2, HEADER_OES_ES2, SAMPLER_OES);
 
 	/**
-	 * ナイトビジョン風に強調表示するフラグメントシェーダ
+	 * 用于夜视样式突出显示的片段着色器
 	 * for ES3
 	 */
 	private static final String FRAGMENT_SHADER_NIGHT_BASE_ES3
@@ -254,7 +254,7 @@ public class ShaderConst implements GLConst {
 
 //--------------------------------------------------------------------------------
 	/**
-	 * クロマキー合成用に緑を透過させるフラグメントシェーダ
+	 * 片段着色器，用于传输绿色以进行色度键合成
 	 * for ES2
 	 */
 	private static final String FRAGMENT_SHADER_CHROMA_KEY_BASE_ES2
@@ -304,7 +304,7 @@ public class ShaderConst implements GLConst {
 
 //--------------------------------------------------------------------------------
 	/**
-	 * SQUEEZE効果付与のフラグメントシェーダ
+	 * 具有挤压效果的片段着色器
 	 * for ES2
 	 */
 	private static final String FRAGMENT_SHADER_SQUEEZE_BASE_ES2
@@ -331,7 +331,7 @@ public class ShaderConst implements GLConst {
 		= String.format(FRAGMENT_SHADER_SQUEEZE_BASE_ES2, HEADER_OES_ES2, SAMPLER_OES);
 
 	/**
-	 * SQUEEZE効果付与のフラグメントシェーダ
+	 * 具有挤压效果的片段着色器
 	 * for ES3
 	 */
 	private static final String FRAGMENT_SHADER_SQUEEZE_BASE_ES3
@@ -360,7 +360,7 @@ public class ShaderConst implements GLConst {
 
 //--------------------------------------------------------------------------------
 	/**
-	 * TWIRL効果付与のフラグメントシェーダ
+	 * 具有 TWIRL 效果的片段着色器
 	 * for ES2
 	 */
 	public static final String FRAGMENT_SHADER_TWIRL_BASE_ES2
@@ -387,7 +387,7 @@ public class ShaderConst implements GLConst {
 		= String.format(FRAGMENT_SHADER_TWIRL_BASE_ES2, HEADER_OES_ES2, SAMPLER_OES);
 
 	/**
-	 * TWIRL効果付与のフラグメントシェーダ
+	 * 具有 TWIRL 效果的片段着色器
 	 * for ES3
 	 */
 	public static final String FRAGMENT_SHADER_TWIRL_BASE_ES3
@@ -416,7 +416,7 @@ public class ShaderConst implements GLConst {
 
 //--------------------------------------------------------------------------------
 	/**
-	 * TUNNEL Effect付与のフラグメントシェーダ
+	 * 具有隧道效果的片段着色器
 	 * for ES2
 	 */
 	public static final String FRAGMENT_SHADER_TUNNEL_BASE_ES2
@@ -472,7 +472,7 @@ public class ShaderConst implements GLConst {
 
 //--------------------------------------------------------------------------------
 	/**
-	 * Bulge Effect付与のフラグメントシェーダ
+	 * Bulge Effect具有凸起效果的片段着色器
 	 * for ES2
 	 */
 	public static final String FRAGMENT_SHADER_BULGE_BASE_ES2
@@ -499,7 +499,7 @@ public class ShaderConst implements GLConst {
 		= String.format(FRAGMENT_SHADER_BULGE_BASE_ES2, HEADER_OES_ES2, SAMPLER_OES);
 
 	/**
-	 * Bulge Effect付与のフラグメントシェーダ
+	 * Bulge Effect具有凸起效果的片段着色器
 	 * for ES3
 	 */
 	public static final String FRAGMENT_SHADER_BULGE_BASE_ES3
@@ -528,7 +528,7 @@ public class ShaderConst implements GLConst {
 
 //--------------------------------------------------------------------------------
 	/**
-	 * Dent Effect付与のフラグメントシェーダ
+	 * Dent Effect具有凹痕效果的片段着色器
 	 * for ES2
 	 */
 	public static final String FRAGMENT_SHADER_DENT_BASE_ES2
@@ -584,7 +584,7 @@ public class ShaderConst implements GLConst {
 
 //--------------------------------------------------------------------------------
 	/**
-	 * Fisheye Effect付与のフラグメントシェーダ
+	 * Fisheye Effect具有鱼眼效果的片段着色器
 	 * for ES2
 	 */
 	public static final String FRAGMENT_SHADER_FISHEYE_BASE_ES2
@@ -611,7 +611,7 @@ public class ShaderConst implements GLConst {
 		= String.format(FRAGMENT_SHADER_FISHEYE_BASE_ES2, HEADER_OES_ES2, SAMPLER_OES);
 
 	/**
-	 * Fisheye Effect付与のフラグメントシェーダ
+	 * Fisheye Effect具有鱼眼效果的片段着色器
 	 * for ES3
 	 */
 	public static final String FRAGMENT_SHADER_FISHEYE_BASE_ES3
@@ -640,7 +640,7 @@ public class ShaderConst implements GLConst {
 
 //--------------------------------------------------------------------------------
 	/**
-	 * Stretch Effect付与のフラグメントシェーダ
+	 * Stretch Effect具有拉伸效果的片段着色器
 	 * for ES2
 	 */
 	public static final String FRAGMENT_SHADER_STRETCH_BASE_ES2
@@ -694,7 +694,7 @@ public class ShaderConst implements GLConst {
 
 //--------------------------------------------------------------------------------
 	/**
-	 * Mirror Effect付与のフラグメントシェーダ
+	 * Mirror Effect具有镜像效果的片段着色器
 	 * for ES2
 	 */
 	public static final String FRAGMENT_SHADER_MIRROR_BASE_ES2
@@ -742,7 +742,7 @@ public class ShaderConst implements GLConst {
 
 //--------------------------------------------------------------------------------
 	/**
-	 * Sobel Effect付与のフラグメントシェーダ
+	 * Sobel Effect具有索贝尔效果的片段着色器
 	 * for ES2
 	 */
 	public static final String FRAGMENT_SHADER_SOBEL_BASE_ES2
@@ -835,7 +835,7 @@ public class ShaderConst implements GLConst {
 	public static final float[] KERNEL_LAPLACIAN = { 1f, 1f, 1f, 1f, -8f, 1f, 1f, 1f, 1f, };	// ラプラシアン(2次微分)
 
 	/**
-	 * カーネル関数による映像効果付与のフラグメントシェーダ
+	 * 片段着色器，用于通过内核函数添加视频效果
 	 * for ES2
 	 */
 	private static final String FRAGMENT_SHADER_FILT3x3_BASE_ES2
@@ -867,7 +867,7 @@ public class ShaderConst implements GLConst {
 		= String.format(FRAGMENT_SHADER_FILT3x3_BASE_ES2, HEADER_OES_ES2, SAMPLER_OES);
 
 	/**
-	 * カーネル関数による映像効果付与のフラグメントシェーダ
+	 * 片段着色器，用于通过内核函数添加视频效果
 	 * for ES3
 	 */
 	private static final String FRAGMENT_SHADER_FILT3x3_BASE_ES3
