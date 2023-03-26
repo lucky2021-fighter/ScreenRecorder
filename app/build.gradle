@@ -1,0 +1,52 @@
+/*plugins {
+    id 'com.android.application'
+}*/
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+
+
+android {
+    compileSdkVersion 30
+
+    defaultConfig {
+        applicationId "com.serenegiant.screenrecordingsample"
+        minSdkVersion 23
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    // androidx
+    implementation "androidx.legacy:legacy-support-v4:$androidXLegacyV4"
+    implementation "androidx.appcompat:appcompat:$androidXVersion"
+    implementation "androidx.recyclerview:recyclerview:$androidXRecyclerview"
+    implementation "androidx.exifinterface:exifinterface:$androidXExif"
+    implementation "com.google.android.material:material:$androidXMaterial"
+    implementation "androidx.lifecycle:lifecycle-process:$androidXLifecycle"
+    implementation "androidx.databinding:databinding-common:$androidXDataBinding"
+
+    //implementation "androidx.core:core-ktx:$androidXCore"
+    //implementation "androidx.preference:preference-ktx:$androidXPreference"
+    //implementation "androidx.fragment:fragment-ktx:$androidXFragmentKtx"
+    //implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidXLifecycleKtx"
+    //implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$androidXLifecycleKtx"
+    //implementation "androidx.lifecycle:lifecycle-livedata-ktx:$androidXLifecycleKtx"
+    implementation "androidx.lifecycle:lifecycle-service:$androidXLifecycleKtx"
+    //implementation "androidx.lifecycle:lifecycle-common-java8:$androidXLifecycleKtx"
+    //implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion"
+}
